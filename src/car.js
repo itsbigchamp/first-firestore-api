@@ -31,6 +31,22 @@ export function createCar(req, res) {
     // send back new doc id
 }
 
+export function updateCar(req, res) {
+    // update cars in collection
+    const {id} = req.params;
+    // connect to db
+    const db = dbConnect();
+    let patchCar = req.body;
+    db.collection('cars').doc(id).set(patchCar, {merge: true})
+    .then(doc => {
+        res.status(201).send({
+            success: true,
+            id: doc.id 
+        })
+    })
+    .catch(err => handleError(err, res))
+}
+
 function handleError(err, res) {
     console.error(err)
     res.status(500).send(err)
